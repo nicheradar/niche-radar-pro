@@ -42,11 +42,43 @@ const ScoreRow = ({
 
 export const NicheCard = ({ niche }: { niche: NicheWithOpportunity }) => {
   const { scores, opportunity } = niche;
+  const { user } = useAuth();
+  const { isFavorite, toggle } = useFavorites();
+  const navigate = useNavigate();
+  const fav = isFavorite(String(niche.id));
+
+  const handleSave = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      toast("Sign in to save niches", {
+        description: "Create a free account to bookmark niches.",
+        action: { label: "Sign in", onClick: () => navigate("/auth") },
+      });
+      return;
+    }
+    const result = await toggle(String(niche.id));
+    if (result === "added") toast.success(`Saved "${niche.name}"`);
+    if (result === "removed") toast(`Removed "${niche.name}"`);
+  };
 
   return (
     <article className="group relative rounded-3xl border border-border bg-card p-6 shadow-card hover:shadow-elegant hover:-translate-y-1 transition-smooth flex flex-col">
+      {/* Save button */}
+      <button
+        onClick={handleSave}
+        aria-label={fav ? "Remove from favorites" : "Save to favorites"}
+        className={`absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border transition-smooth ${
+          fav
+            ? "border-primary/40 bg-primary/10 text-primary"
+            : "border-border bg-background/80 text-muted-foreground hover:text-primary hover:border-primary/40"
+        }`}
+      >
+        <Heart className={`h-4 w-4 ${fav ? "fill-primary" : ""}`} />
+      </button>
+
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-5">
+      <div className="flex items-start justify-between gap-4 mb-5 pr-12">
         <div className="flex items-start gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-2xl shrink-0">
             {niche.emoji}
