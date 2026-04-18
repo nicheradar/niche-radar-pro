@@ -1,0 +1,246 @@
+export type Niche = {
+  id: string;
+  name: string;
+  emoji: string;
+  category: string;
+  format: "shorts" | "long-form" | "both";
+  style: "faceless" | "personal" | "both";
+  beginnerFriendly: boolean;
+  region: "global" | "us" | "eu" | "asia" | "latam";
+  scores: {
+    competition: number; // lower = better, 0-100 (we'll display inversely)
+    virality: number;
+    monetization: number;
+    ease: number;
+    repeatability: number;
+  };
+  why: string;
+  videoIdeas: string[];
+  hooks: string[];
+};
+
+const opportunity = (s: Niche["scores"]) =>
+  Math.round(
+    ((100 - s.competition) * 0.25 +
+      s.virality * 0.25 +
+      s.monetization * 0.2 +
+      s.ease * 0.15 +
+      s.repeatability * 0.15)
+  );
+
+export const niches: Niche[] = [
+  {
+    id: "ai-tools-tier-list",
+    name: "AI Tools Tier Lists",
+    emoji: "🤖",
+    category: "Tech",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: true,
+    region: "global",
+    scores: { competition: 38, virality: 88, monetization: 82, ease: 78, repeatability: 92 },
+    why: "AI tool discovery is exploding. Short tier-list videos get massive saves and shares because viewers want to remember the tools. Easy to produce with screen recordings + voiceover.",
+    videoIdeas: [
+      "Top 5 free AI tools that feel illegal",
+      "I ranked every AI image generator",
+      "AI tools that will replace your job in 2026",
+      "Hidden AI websites no one is talking about",
+      "Free AI tools vs paid ones — who wins?",
+      "AI tools every student needs",
+      "Building a startup using only free AI",
+    ],
+    hooks: [
+      "This AI tool is free and it shouldn't be…",
+      "Stop paying for ChatGPT — use this instead",
+      "I tested 50 AI tools so you don't have to",
+      "The #1 AI tool nobody is using",
+    ],
+  },
+  {
+    id: "weird-history",
+    name: "Weird History Facts",
+    emoji: "📜",
+    category: "Education",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: true,
+    region: "global",
+    scores: { competition: 45, virality: 92, monetization: 65, ease: 85, repeatability: 95 },
+    why: "Curiosity-driven content has insanely high retention. Stock footage + AI voice + bold text overlays is a proven, low-effort format with infinite source material.",
+    videoIdeas: [
+      "The Roman emperor who married his horse",
+      "Why pirates wore eye patches (it's not why you think)",
+      "The forgotten war that lasted 335 years with zero deaths",
+      "Cleopatra lived closer to the iPhone than the pyramids",
+      "The man who survived two atomic bombs",
+      "Medieval cures that actually worked",
+      "Strange laws still active today",
+    ],
+    hooks: [
+      "You won't believe this actually happened…",
+      "History books left this part out",
+      "This fact will ruin your day",
+      "They don't teach you this in school",
+    ],
+  },
+  {
+    id: "stoic-wisdom",
+    name: "Stoic Wisdom & Mindset",
+    emoji: "🧠",
+    category: "Self-Improvement",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: true,
+    region: "global",
+    scores: { competition: 55, virality: 84, monetization: 72, ease: 90, repeatability: 90 },
+    why: "Cinematic stock clips + deep voiceover quotes have an almost guaranteed engagement floor. Audience is loyal and the format scales effortlessly.",
+    videoIdeas: [
+      "5 stoic habits that changed my life",
+      "Marcus Aurelius on dealing with annoying people",
+      "Why silent men win in life",
+      "The stoic morning routine",
+      "How to control your emotions like a stoic",
+      "What stoics say about heartbreak",
+    ],
+    hooks: [
+      "If you're under 25, listen carefully…",
+      "This is why you feel lost",
+      "The stoics figured this out 2,000 years ago",
+      "Read this when you feel weak",
+    ],
+  },
+  {
+    id: "cash-cow-finance",
+    name: "Personal Finance Tips (Gen Z)",
+    emoji: "💸",
+    category: "Finance",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: false,
+    region: "us",
+    scores: { competition: 70, virality: 80, monetization: 95, ease: 65, repeatability: 88 },
+    why: "Highest CPMs on YouTube. Gen Z audience is hungry for clear money advice and the ad rates are unmatched even at modest view counts.",
+    videoIdeas: [
+      "3 bank accounts every adult needs",
+      "How to make $1000/mo as a teen",
+      "The 50/30/20 rule explained in 60s",
+      "Credit score hacks banks hate",
+      "Roth IRA vs 401k in 30 seconds",
+      "Side hustles that actually pay",
+    ],
+    hooks: [
+      "If you're broke, watch this",
+      "Your bank doesn't want you to know this",
+      "I wish I knew this at 18",
+      "Stop saving money the wrong way",
+    ],
+  },
+  {
+    id: "satisfying-restoration",
+    name: "Satisfying Restoration Clips",
+    emoji: "🛠️",
+    category: "Lifestyle",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: true,
+    region: "global",
+    scores: { competition: 30, virality: 90, monetization: 45, ease: 70, repeatability: 85 },
+    why: "Visually addictive content with global appeal. Low competition because most creators avoid the editing work — but a simple template solves that.",
+    videoIdeas: [
+      "Restoring a rusted knife to mirror finish",
+      "Cleaning the dirtiest carpet ever",
+      "Fixing a 100-year-old clock",
+      "Power washing a forgotten driveway",
+      "Reviving an abandoned game console",
+      "Bringing a vintage camera back to life",
+    ],
+    hooks: [
+      "Wait until the end…",
+      "This took 40 hours",
+      "I found this in the trash",
+      "You won't believe the before",
+    ],
+  },
+  {
+    id: "language-learning",
+    name: "Bite-Size Language Learning",
+    emoji: "🗣️",
+    category: "Education",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: true,
+    region: "global",
+    scores: { competition: 35, virality: 75, monetization: 70, ease: 82, repeatability: 95 },
+    why: "Massive evergreen demand and shockingly few high-quality faceless creators. Each language is its own sub-niche with loyal subscribers.",
+    videoIdeas: [
+      "5 Spanish phrases natives actually use",
+      "Korean words that don't exist in English",
+      "Sound fluent in French in 60 seconds",
+      "The fastest way to learn Japanese kanji",
+      "Common English mistakes ESL speakers make",
+    ],
+    hooks: [
+      "Stop saying it like a tourist",
+      "Natives never say this",
+      "Learn this before your trip",
+      "This phrase makes you sound fluent",
+    ],
+  },
+  {
+    id: "micro-docs",
+    name: "Mini Documentaries (60s)",
+    emoji: "🎬",
+    category: "Education",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: false,
+    region: "global",
+    scores: { competition: 40, virality: 86, monetization: 75, ease: 55, repeatability: 80 },
+    why: "Cinematic storytelling in 60 seconds is rare and rewarded. Stands out in a sea of low-effort Shorts and gets pushed hard by the algorithm.",
+    videoIdeas: [
+      "The town that disappeared overnight",
+      "How one man saved a million lives",
+      "The mystery of Flight MH370",
+      "Why Japan has the cleanest streets",
+      "The richest family you've never heard of",
+    ],
+    hooks: [
+      "In 1987, something strange happened…",
+      "Nobody talks about this anymore",
+      "This story should be a movie",
+      "It started with a single phone call",
+    ],
+  },
+  {
+    id: "pet-psychology",
+    name: "Pet Behavior & Psychology",
+    emoji: "🐶",
+    category: "Pets",
+    format: "shorts",
+    style: "faceless",
+    beginnerFriendly: true,
+    region: "global",
+    scores: { competition: 42, virality: 88, monetization: 60, ease: 80, repeatability: 90 },
+    why: "Pet content always wins on emotion. Educational angle (why pets do X) has lower competition than typical cute clips and builds repeat viewers.",
+    videoIdeas: [
+      "Why your dog stares at you while pooping",
+      "The real reason cats knock things off tables",
+      "Signs your pet is secretly stressed",
+      "Dog breeds that bond with one person only",
+      "What your cat's tail is really saying",
+    ],
+    hooks: [
+      "If your dog does this, pay attention",
+      "Vets won't tell you this",
+      "Your cat is trying to warn you",
+      "This means your pet loves you",
+    ],
+  },
+];
+
+export const nichesWithOpportunity = niches.map((n) => ({
+  ...n,
+  opportunity: opportunity(n.scores),
+}));
+
+export type NicheWithOpportunity = (typeof nichesWithOpportunity)[number];
