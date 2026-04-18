@@ -21,14 +21,13 @@ const Index = () => {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               Built for faceless YouTube creators
             </div>
-
-            <h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">
-              Find{" "}
-              <span className="bg-gradient-primary bg-clip-text text-transparent">
-                low-competition
-              </span>{" "}
-              YouTube niches with viral potential
-            </h1>
+<h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">
+  Find{" "}
+  <span className="text-primary">
+    low-competition
+  </span>{" "}
+  YouTube niches with viral potential
+</h1>
 
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
               Discover niche ideas, viral angles, and content strategies in seconds — so you can launch a faceless channel that actually grows.
