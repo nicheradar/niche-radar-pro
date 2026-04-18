@@ -5,7 +5,8 @@ import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
 import { FiltersBar, defaultFilters, type Filters } from "@/components/FiltersBar";
 import { NicheCard } from "@/components/NicheCard";
-import { nichesWithOpportunity } from "@/data/niches";
+import { NicheCardSkeleton } from "@/components/NicheCardSkeleton";
+import { useNiches } from "@/hooks/useNiches";
 import { ArrowLeft, SlidersHorizontal } from "lucide-react";
 
 const Results = () => {
@@ -13,9 +14,10 @@ const Results = () => {
   const q = params.get("q")?.toLowerCase() ?? "";
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [showFilters, setShowFilters] = useState(true);
+  const { data: niches, loading, error } = useNiches();
 
   const results = useMemo(() => {
-    return nichesWithOpportunity
+    return niches
       .filter((n) => {
         if (q && !(`${n.name} ${n.category} ${n.why}`.toLowerCase().includes(q))) return false;
         if (filters.style !== "any" && n.style !== filters.style && n.style !== "both") return false;
@@ -26,7 +28,7 @@ const Results = () => {
         return true;
       })
       .sort((a, b) => b.opportunity - a.opportunity);
-  }, [q, filters]);
+  }, [q, filters, niches]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -56,7 +58,13 @@ const Results = () => {
       <section className="container py-10 flex-1">
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{results.length}</span> niche{results.length !== 1 && "s"} found
+            {loading ? (
+              "Loading niches..."
+            ) : (
+              <>
+                <span className="font-semibold text-foreground">{results.length}</span> niche{results.length !== 1 && "s"} found
+              </>
+            )}
           </p>
           <button
             onClick={() => setShowFilters((s) => !s)}
@@ -73,7 +81,23 @@ const Results = () => {
           </div>
         )}
 
-        {results.length === 0 ? (
+        {loading ? (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <NicheCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="rounded-3xl border border-dashed border-destructive/40 bg-card p-12 text-center">
+            <p className="font-display text-lg font-bold">Couldn't load niches</p>
+            <p className="mt-2 text-sm text-muted-foreground">{error}</p>
+          </div>
+        ) : niches.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center">
+            <p className="font-display text-lg font-bold">No niches found</p>
+            <p className="mt-2 text-sm text-muted-foreground">Add rows to your "niches" table to see them here.</p>
+          </div>
+        ) : results.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center">
             <p className="font-display text-lg font-bold">No niches match your filters</p>
             <p className="mt-2 text-sm text-muted-foreground">Try loosening a filter or searching a different topic.</p>
