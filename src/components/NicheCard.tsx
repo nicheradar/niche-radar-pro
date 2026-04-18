@@ -1,5 +1,9 @@
-import { TrendingUp, DollarSign, Zap, Repeat, Shield, Lightbulb, Flame } from "lucide-react";
+import { TrendingUp, DollarSign, Zap, Repeat, Shield, Lightbulb, Flame, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import type { NicheWithOpportunity } from "@/data/niches";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFavorites } from "@/hooks/useFavorites";
 
 const ScoreRow = ({
   icon: Icon,
