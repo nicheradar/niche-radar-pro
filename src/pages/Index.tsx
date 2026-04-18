@@ -23,12 +23,11 @@ const Index = () => {
             </div>
 <h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">
   Find{" "}
-  <span className="text-primary">
+  <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
     low-competition
   </span>{" "}
   YouTube niches with viral potential
 </h1>
-
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
               Discover niche ideas, viral angles, and content strategies in seconds — so you can launch a faceless channel that actually grows.
             </p>
@@ -137,9 +136,9 @@ const Index = () => {
               { n: "03", t: "Get a launch plan", d: "Receive scored niches, video ideas and hook templates ready to record today." },
             ].map((s) => (
               <div key={s.n} className="rounded-3xl bg-card border border-border p-6 shadow-card">
-                <span className="font-display text-4xl font-extrabold bg-gradient-primary bg-clip-text text-transparent">
-                  {s.n}
-                </span>
+                <span className="font-display text-4xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+  {s.n}
+</span>
                 <h3 className="mt-3 font-display text-lg font-bold">{s.t}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.d}</p>
               </div>
@@ -150,7 +149,7 @@ const Index = () => {
 
       {/* CTA */}
       <section id="pricing" className="container py-20">
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-primary p-10 sm:p-14 text-center shadow-elegant">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-10 sm:p-14 text-center shadow-elegant">
           <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_top_right,white,transparent_60%)]" />
           <h2 className="relative font-display text-3xl sm:text-4xl font-bold tracking-tight text-primary-foreground">
             Your next viral channel is one search away
