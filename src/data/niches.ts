@@ -17,15 +17,17 @@ export type Niche = {
   why: string;
   videoIdeas: string[];
   hooks: string[];
+  keywords: string[];
+  related: string[];
 };
 
 const opportunity = (s: Niche["scores"]) =>
   Math.round(
-    ((100 - s.competition) * 0.25 +
+    (100 - s.competition) * 0.25 +
       s.virality * 0.25 +
       s.monetization * 0.2 +
       s.ease * 0.15 +
-      s.repeatability * 0.15)
+      s.repeatability * 0.15
   );
 
 export const niches: Niche[] = [
@@ -55,6 +57,26 @@ export const niches: Niche[] = [
       "I tested 50 AI tools so you don't have to",
       "The #1 AI tool nobody is using",
     ],
+    keywords: [
+      "ai",
+      "ai tools",
+      "chatgpt",
+      "automation",
+      "tech",
+      "software",
+      "websites",
+      "productivity",
+      "ai websites",
+      "free ai tools",
+    ],
+    related: [
+      "saas tools",
+      "productivity tools",
+      "creator tools",
+      "online business",
+      "digital tools",
+      "automation tools",
+    ],
   },
   {
     id: "weird-history",
@@ -82,6 +104,26 @@ export const niches: Niche[] = [
       "This fact will ruin your day",
       "They don't teach you this in school",
     ],
+    keywords: [
+      "history",
+      "facts",
+      "weird history",
+      "historical facts",
+      "strange history",
+      "ancient history",
+      "curiosity",
+      "educational shorts",
+      "dark history",
+      "fun facts",
+    ],
+    related: [
+      "mystery",
+      "ancient civilizations",
+      "war facts",
+      "forgotten stories",
+      "world facts",
+      "historical mysteries",
+    ],
   },
   {
     id: "stoic-wisdom",
@@ -107,6 +149,26 @@ export const niches: Niche[] = [
       "This is why you feel lost",
       "The stoics figured this out 2,000 years ago",
       "Read this when you feel weak",
+    ],
+    keywords: [
+      "stoic",
+      "stoicism",
+      "mindset",
+      "motivation",
+      "discipline",
+      "self improvement",
+      "mental strength",
+      "philosophy",
+      "quotes",
+      "life advice",
+    ],
+    related: [
+      "success mindset",
+      "masculinity",
+      "confidence",
+      "focus",
+      "habits",
+      "deep quotes",
     ],
   },
   {
@@ -134,6 +196,26 @@ export const niches: Niche[] = [
       "I wish I knew this at 18",
       "Stop saving money the wrong way",
     ],
+    keywords: [
+      "finance",
+      "money",
+      "personal finance",
+      "saving",
+      "investing",
+      "side hustle",
+      "credit score",
+      "banking",
+      "wealth",
+      "gen z money",
+    ],
+    related: [
+      "business",
+      "income",
+      "budgeting",
+      "financial freedom",
+      "passive income",
+      "money tips",
+    ],
   },
   {
     id: "satisfying-restoration",
@@ -160,6 +242,26 @@ export const niches: Niche[] = [
       "I found this in the trash",
       "You won't believe the before",
     ],
+    keywords: [
+      "satisfying",
+      "restoration",
+      "repair",
+      "cleaning",
+      "before and after",
+      "power washing",
+      "fixing",
+      "tools",
+      "rust removal",
+      "diy restore",
+    ],
+    related: [
+      "oddly satisfying",
+      "cleaning videos",
+      "repair videos",
+      "makeover",
+      "object restoration",
+      "workshop clips",
+    ],
   },
   {
     id: "language-learning",
@@ -184,6 +286,26 @@ export const niches: Niche[] = [
       "Natives never say this",
       "Learn this before your trip",
       "This phrase makes you sound fluent",
+    ],
+    keywords: [
+      "language",
+      "learn english",
+      "learn spanish",
+      "learn french",
+      "learn korean",
+      "learn japanese",
+      "phrases",
+      "vocabulary",
+      "grammar",
+      "speaking tips",
+    ],
+    related: [
+      "travel language",
+      "english tips",
+      "esl",
+      "pronunciation",
+      "bilingual content",
+      "study shorts",
     ],
   },
   {
@@ -210,6 +332,26 @@ export const niches: Niche[] = [
       "This story should be a movie",
       "It started with a single phone call",
     ],
+    keywords: [
+      "documentary",
+      "mini documentary",
+      "storytelling",
+      "true story",
+      "explained",
+      "mystery",
+      "deep dive",
+      "cinematic",
+      "world stories",
+      "real events",
+    ],
+    related: [
+      "history stories",
+      "unsolved mysteries",
+      "geopolitics",
+      "case study",
+      "news explainer",
+      "interesting stories",
+    ],
   },
   {
     id: "pet-psychology",
@@ -234,6 +376,26 @@ export const niches: Niche[] = [
       "Vets won't tell you this",
       "Your cat is trying to warn you",
       "This means your pet loves you",
+    ],
+    keywords: [
+      "pets",
+      "dog",
+      "dogs",
+      "cat",
+      "cats",
+      "pet behavior",
+      "animal psychology",
+      "dog training",
+      "cat behavior",
+      "pet tips",
+    ],
+    related: [
+      "cute animals",
+      "pet care",
+      "animal facts",
+      "dog facts",
+      "cat facts",
+      "pet education",
     ],
   },
 ];
