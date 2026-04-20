@@ -55,6 +55,10 @@ const Results = () => {
   const relatedResults = results.filter((n) => partialIds.has(n.id));
   const fallbackResults = results.filter((n) => !exactIds.has(n.id) && !partialIds.has(n.id));
 
+  const hasQuery = q.length > 0;
+  const hasExactMatches = exactResults.length > 0;
+  const hasRelatedMatches = relatedResults.length > 0;
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -70,7 +74,7 @@ const Results = () => {
           </Link>
 
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            {q ? (
+            {hasQuery ? (
               <>
                 Niches matching{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">"{q}"</span>
@@ -81,7 +85,7 @@ const Results = () => {
           </h1>
 
           <p className="mt-2 text-muted-foreground">
-            {q
+            {hasQuery
               ? "Showing exact matches, related niches, and smart fallback recommendations."
               : "Sorted by opportunity score. Refine the filters to match your style."}
           </p>
@@ -146,6 +150,18 @@ const Results = () => {
           </div>
         ) : (
           <div className="space-y-10">
+            {hasQuery && !hasExactMatches && hasRelatedMatches && (
+              <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
+                No exact niche match found for <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing the closest related niche ideas.
+              </div>
+            )}
+
+            {hasQuery && !hasExactMatches && !hasRelatedMatches && (
+              <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
+                We couldn’t find a direct niche match for <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing high-opportunity recommendations you can still explore.
+              </div>
+            )}
+
             {exactResults.length > 0 && (
               <div>
                 <h2 className="font-display text-2xl font-bold mb-4">Best Matches</h2>
