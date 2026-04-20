@@ -93,14 +93,14 @@ const Results = () => {
           </Link>
 
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            {hasQuery ? (
-              <>
-                Niches matching{" "}
-                <span className="bg-gradient-primary bg-clip-text text-transparent">"{q}"</span>
-              </>
-            ) : (
-              "Trending niches for you"
-            )}
+           {hasQuery ? (
+  <>
+    Niches matching{" "}
+    <span className="text-primary font-bold">"{q}"</span>
+  </>
+) : (
+  "Trending niches for you"
+)}
           </h1>
 
           <p className="mt-2 text-muted-foreground">
