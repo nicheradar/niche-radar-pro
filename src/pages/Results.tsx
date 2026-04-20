@@ -56,6 +56,9 @@ const Results = () => {
   const fallbackResults = results.filter((n) => !exactIds.has(n.id) && !partialIds.has(n.id));
 
   const hasQuery = q.length > 0;
+  const trendingResults = [...results]
+  .sort((a, b) => b.opportunity - a.opportunity)
+  .slice(0, 9);
   const hasExactMatches = exactResults.length > 0;
   const hasRelatedMatches = relatedResults.length > 0;
 
@@ -161,7 +164,18 @@ const Results = () => {
                 We couldn’t find a direct niche match for <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing high-opportunity recommendations you can still explore.
               </div>
             )}
-
+{!hasQuery && (
+  <div>
+    <h2 className="font-display text-2xl font-bold mb-4">
+      🔥 Trending Niches
+    </h2>
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {trendingResults.map((n) => (
+        <NicheCard key={n.id} niche={n} />
+      ))}
+    </div>
+  </div>
+)}
             {exactResults.length > 0 && (
               <div>
                 <h2 className="font-display text-2xl font-bold mb-4">Best Matches</h2>
