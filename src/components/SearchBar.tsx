@@ -1,19 +1,24 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Search, Sparkles } from "lucide-react";
-import { useState } from "react";
 
 export const SearchBar = ({ size = "lg" }: { size?: "lg" | "md" }) => {
-  const [q, setQ] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [q, setQ] = useState("");
+
+  useEffect(() => {
+    const currentQuery = new URLSearchParams(location.search).get("q") || "";
+    setQ(currentQuery);
+  }, [location.search]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const cleanQuery = q.trim();
 
-    // ❗ prevent empty search
     if (!cleanQuery) {
-      navigate("/results"); // show fallback/trending
+      navigate("/results");
       return;
     }
 
@@ -28,7 +33,6 @@ export const SearchBar = ({ size = "lg" }: { size?: "lg" | "md" }) => {
       className="group relative w-full max-w-2xl mx-auto"
     >
       <div className="relative flex items-center rounded-2xl border border-border bg-card shadow-card transition-smooth group-focus-within:shadow-elegant group-focus-within:border-primary/40">
-        
         <Search
           className={`${
             big ? "ml-5 h-5 w-5" : "ml-4 h-4 w-4"
@@ -39,7 +43,6 @@ export const SearchBar = ({ size = "lg" }: { size?: "lg" | "md" }) => {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Try: AI tools, cats, finance, horror, motivation…"
-          autoFocus
           className={`flex-1 bg-transparent outline-none px-3 ${
             big ? "py-5 text-base" : "py-3 text-sm"
           } placeholder:text-muted-foreground`}
