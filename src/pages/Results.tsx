@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -8,7 +8,7 @@ import { NicheCard } from "@/components/NicheCard";
 import { NicheCardSkeleton } from "@/components/NicheCardSkeleton";
 import { useNiches } from "@/hooks/useNiches";
 import { searchNiches } from "@/utils/searchNiches";
-import { generateDynamicNiches } from "@/utils/generateDynamicNiches";
+import { generateAINiches } from "@/utils/aiNicheGenerator";
 import { ArrowLeft, SlidersHorizontal } from "lucide-react";
 
 const Results = () => {
@@ -16,25 +16,55 @@ const Results = () => {
   const q = params.get("q")?.toLowerCase().trim() ?? "";
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [showFilters, setShowFilters] = useState(true);
+  const [aiResults, setAiResults] = useState<any[]>([]);
+  const [aiLoading, setAiLoading] = useState(false);
   const { loading, error } = useNiches();
 
   const searchResults = useMemo(() => {
     return searchNiches(q);
   }, [q]);
 
-  const dynamicResults = useMemo(() => {
+  useEffect(() => {
     const hasExactDatabaseResults = searchResults.exactMatches.length > 0;
 
-    if (!q || hasExactDatabaseResults) return [];
+    if (!q || hasExactDatabaseResults) {
+      setAiResults([]);
+      return;
+    }
 
-    return generateDynamicNiches(q);
-  }, [q, searchResults]);
+    let cancelled = false;
+
+    const runAI = async () => {
+      try {
+        setAiLoading(true);
+        const results = await generateAINiches(q);
+        if (!cancelled) {
+          setAiResults(results);
+        }
+      } catch (err) {
+        console.error("AI generation failed:", err);
+        if (!cancelled) {
+          setAiResults([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setAiLoading(false);
+        }
+      }
+    };
+
+    runAI();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [q, searchResults.exactMatches.length]);
 
   const baseResults = useMemo(() => {
     const merged = [
       ...searchResults.exactMatches,
       ...searchResults.partialMatches,
-      ...dynamicResults,
+      ...aiResults,
       ...searchResults.fallbackMatches,
     ];
 
@@ -43,7 +73,7 @@ const Results = () => {
     );
 
     return uniqueResults;
-  }, [searchResults, dynamicResults]);
+  }, [searchResults, aiResults]);
 
   const results = useMemo(() => {
     return baseResults
@@ -60,13 +90,13 @@ const Results = () => {
 
   const exactIds = new Set(searchResults.exactMatches.map((n) => n.id));
   const partialIds = new Set(searchResults.partialMatches.map((n) => n.id));
-  const dynamicIds = new Set(dynamicResults.map((n) => n.id));
+  const aiIds = new Set(aiResults.map((n) => n.id));
 
   const exactResults = results.filter((n) => exactIds.has(n.id));
   const relatedResults = results.filter((n) => partialIds.has(n.id));
-  const generatedResults = results.filter((n) => dynamicIds.has(n.id));
+  const generatedResults = results.filter((n) => aiIds.has(n.id));
   const fallbackResults = results.filter(
-    (n) => !exactIds.has(n.id) && !partialIds.has(n.id) && !dynamicIds.has(n.id)
+    (n) => !exactIds.has(n.id) && !partialIds.has(n.id) && !aiIds.has(n.id)
   );
 
   const hasQuery = q.length > 0;
@@ -93,19 +123,18 @@ const Results = () => {
           </Link>
 
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-           {hasQuery ? (
-  <>
-    Niches matching{" "}
-    <span className="text-primary font-bold">"{q}"</span>
-  </>
-) : (
-  "Trending niches for you"
-)}
+            {hasQuery ? (
+              <>
+                Niches matching <span className="text-primary font-bold">"{q}"</span>
+              </>
+            ) : (
+              "Trending niches for you"
+            )}
           </h1>
 
           <p className="mt-2 text-muted-foreground">
             {hasQuery
-              ? "Showing exact matches, related niches, and smart fallback recommendations."
+              ? "Showing exact matches, related niches, and AI-powered recommendations."
               : "Sorted by opportunity score. Refine the filters to match your style."}
           </p>
 
@@ -118,7 +147,7 @@ const Results = () => {
       <section className="container py-10 flex-1">
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-muted-foreground">
-            {loading ? (
+            {loading || aiLoading ? (
               "Loading niches..."
             ) : (
               <>
@@ -143,7 +172,7 @@ const Results = () => {
           </div>
         )}
 
-        {loading ? (
+        {loading || aiLoading ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <NicheCardSkeleton key={i} />
@@ -190,16 +219,8 @@ const Results = () => {
 
             {hasQuery && !hasExactMatches && hasGeneratedMatches && (
               <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
-                We also generated extra niche ideas for{" "}
-                <span className="font-semibold text-foreground">"{q}"</span> based on your search.
-              </div>
-            )}
-
-            {hasQuery && !hasExactMatches && !hasRelatedMatches && !hasGeneratedMatches && (
-              <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
-                We couldn’t find a direct niche match for{" "}
-                <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing
-                high-opportunity recommendations you can still explore.
+                We also generated AI niche ideas for{" "}
+                <span className="font-semibold text-foreground">"{q}"</span>.
               </div>
             )}
 
@@ -227,7 +248,7 @@ const Results = () => {
 
             {generatedResults.length > 0 && (
               <div>
-                <h2 className="font-display text-2xl font-bold mb-4">Generated Ideas</h2>
+                <h2 className="font-display text-2xl font-bold mb-4">AI Generated Ideas</h2>
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                   {generatedResults.map((n) => (
                     <NicheCard key={n.id} niche={n} />
