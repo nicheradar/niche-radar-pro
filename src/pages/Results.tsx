@@ -23,10 +23,9 @@ const Results = () => {
   }, [q]);
 
   const dynamicResults = useMemo(() => {
-    const hasStrongDatabaseResults =
-      searchResults.exactMatches.length > 0 || searchResults.partialMatches.length > 0;
+    const hasExactDatabaseResults = searchResults.exactMatches.length > 0;
 
-    if (!q || hasStrongDatabaseResults) return [];
+    if (!q || hasExactDatabaseResults) return [];
 
     return generateDynamicNiches(q);
   }, [q, searchResults]);
@@ -189,11 +188,10 @@ const Results = () => {
               </div>
             )}
 
-            {hasQuery && !hasExactMatches && !hasRelatedMatches && hasGeneratedMatches && (
+            {hasQuery && !hasExactMatches && hasGeneratedMatches && (
               <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
-                We couldn’t find a direct niche match for{" "}
-                <span className="font-semibold text-foreground">"{q}"</span>, so we generated smart
-                niche ideas based on your search.
+                We also generated extra niche ideas for{" "}
+                <span className="font-semibold text-foreground">"{q}"</span> based on your search.
               </div>
             )}
 
