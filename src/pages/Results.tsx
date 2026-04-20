@@ -27,10 +27,10 @@ const Results = () => {
   useEffect(() => {
     const hasExactDatabaseResults = searchResults.exactMatches.length > 0;
 
-    if (!q || hasExactDatabaseResults) {
-      setAiResults([]);
-      return;
-    }
+    if (!q) {
+  setAiResults([]);
+  return;
+}
 
     let cancelled = false;
 
