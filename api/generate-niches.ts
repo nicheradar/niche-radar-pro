@@ -1,5 +1,3 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-
 type AINicheRaw = {
   name: string;
   description: string;
@@ -7,7 +5,7 @@ type AINicheRaw = {
   virality: "High" | "Medium" | "Low";
 };
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -80,10 +78,10 @@ Return JSON in this exact format:
     return res.status(200).json({
       ideas: parsed.ideas ?? [],
     });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(500).json({
       error: "Server error",
-      details: error instanceof Error ? error.message : "Unknown error",
+      details: error?.message || "Unknown error",
     });
   }
 }
