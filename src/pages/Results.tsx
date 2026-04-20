@@ -8,6 +8,7 @@ import { NicheCard } from "@/components/NicheCard";
 import { NicheCardSkeleton } from "@/components/NicheCardSkeleton";
 import { useNiches } from "@/hooks/useNiches";
 import { searchNiches } from "@/utils/searchNiches";
+import { generateDynamicNiches } from "@/utils/generateDynamicNiches";
 import { ArrowLeft, SlidersHorizontal } from "lucide-react";
 
 const Results = () => {
@@ -15,16 +16,26 @@ const Results = () => {
   const q = params.get("q")?.toLowerCase().trim() ?? "";
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [showFilters, setShowFilters] = useState(true);
-  const { data: niches, loading, error } = useNiches();
+  const { loading, error } = useNiches();
 
   const searchResults = useMemo(() => {
     return searchNiches(q);
   }, [q]);
 
+  const dynamicResults = useMemo(() => {
+    const hasStrongDatabaseResults =
+      searchResults.exactMatches.length > 0 || searchResults.partialMatches.length > 0;
+
+    if (!q || hasStrongDatabaseResults) return [];
+
+    return generateDynamicNiches(q);
+  }, [q, searchResults]);
+
   const baseResults = useMemo(() => {
     const merged = [
       ...searchResults.exactMatches,
       ...searchResults.partialMatches,
+      ...dynamicResults,
       ...searchResults.fallbackMatches,
     ];
 
@@ -33,7 +44,7 @@ const Results = () => {
     );
 
     return uniqueResults;
-  }, [searchResults]);
+  }, [searchResults, dynamicResults]);
 
   const results = useMemo(() => {
     return baseResults
@@ -50,17 +61,23 @@ const Results = () => {
 
   const exactIds = new Set(searchResults.exactMatches.map((n) => n.id));
   const partialIds = new Set(searchResults.partialMatches.map((n) => n.id));
+  const dynamicIds = new Set(dynamicResults.map((n) => n.id));
 
   const exactResults = results.filter((n) => exactIds.has(n.id));
   const relatedResults = results.filter((n) => partialIds.has(n.id));
-  const fallbackResults = results.filter((n) => !exactIds.has(n.id) && !partialIds.has(n.id));
+  const generatedResults = results.filter((n) => dynamicIds.has(n.id));
+  const fallbackResults = results.filter(
+    (n) => !exactIds.has(n.id) && !partialIds.has(n.id) && !dynamicIds.has(n.id)
+  );
 
   const hasQuery = q.length > 0;
-  const trendingResults = [...results]
-  .sort((a, b) => b.opportunity - a.opportunity)
-  .slice(0, 9);
   const hasExactMatches = exactResults.length > 0;
   const hasRelatedMatches = relatedResults.length > 0;
+  const hasGeneratedMatches = generatedResults.length > 0;
+
+  const trendingResults = [...results]
+    .sort((a, b) => b.opportunity - a.opportunity)
+    .slice(0, 9);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -153,29 +170,41 @@ const Results = () => {
           </div>
         ) : (
           <div className="space-y-10">
-            {hasQuery && !hasExactMatches && hasRelatedMatches && (
-              <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
-                No exact niche match found for <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing the closest related niche ideas.
+            {!hasQuery && (
+              <div>
+                <h2 className="font-display text-2xl font-bold mb-4">🔥 Trending Niches</h2>
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                  {trendingResults.map((n) => (
+                    <NicheCard key={n.id} niche={n} />
+                  ))}
+                </div>
               </div>
             )}
 
-            {hasQuery && !hasExactMatches && !hasRelatedMatches && (
+            {hasQuery && !hasExactMatches && hasRelatedMatches && (
               <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
-                We couldn’t find a direct niche match for <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing high-opportunity recommendations you can still explore.
+                No exact niche match found for{" "}
+                <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing the
+                closest related niche ideas.
               </div>
             )}
-{!hasQuery && (
-  <div>
-    <h2 className="font-display text-2xl font-bold mb-4">
-      🔥 Trending Niches
-    </h2>
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {trendingResults.map((n) => (
-        <NicheCard key={n.id} niche={n} />
-      ))}
-    </div>
-  </div>
-)}
+
+            {hasQuery && !hasExactMatches && !hasRelatedMatches && hasGeneratedMatches && (
+              <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
+                We couldn’t find a direct niche match for{" "}
+                <span className="font-semibold text-foreground">"{q}"</span>, so we generated smart
+                niche ideas based on your search.
+              </div>
+            )}
+
+            {hasQuery && !hasExactMatches && !hasRelatedMatches && !hasGeneratedMatches && (
+              <div className="rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground">
+                We couldn’t find a direct niche match for{" "}
+                <span className="font-semibold text-foreground">"{q}"</span>, so we’re showing
+                high-opportunity recommendations you can still explore.
+              </div>
+            )}
+
             {exactResults.length > 0 && (
               <div>
                 <h2 className="font-display text-2xl font-bold mb-4">Best Matches</h2>
@@ -198,7 +227,18 @@ const Results = () => {
               </div>
             )}
 
-            {fallbackResults.length > 0 && (
+            {generatedResults.length > 0 && (
+              <div>
+                <h2 className="font-display text-2xl font-bold mb-4">Generated Ideas</h2>
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                  {generatedResults.map((n) => (
+                    <NicheCard key={n.id} niche={n} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {fallbackResults.length > 0 && hasQuery && (
               <div>
                 <h2 className="font-display text-2xl font-bold mb-4">You May Also Explore</h2>
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
