@@ -7,19 +7,37 @@ import { FiltersBar, defaultFilters, type Filters } from "@/components/FiltersBa
 import { NicheCard } from "@/components/NicheCard";
 import { NicheCardSkeleton } from "@/components/NicheCardSkeleton";
 import { useNiches } from "@/hooks/useNiches";
+import { searchNiches } from "@/utils/searchNiches";
 import { ArrowLeft, SlidersHorizontal } from "lucide-react";
 
 const Results = () => {
   const [params] = useSearchParams();
-  const q = params.get("q")?.toLowerCase() ?? "";
+  const q = params.get("q")?.toLowerCase().trim() ?? "";
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [showFilters, setShowFilters] = useState(true);
   const { data: niches, loading, error } = useNiches();
 
+  const searchResults = useMemo(() => {
+    return searchNiches(q);
+  }, [q]);
+
+  const baseResults = useMemo(() => {
+    const merged = [
+      ...searchResults.exactMatches,
+      ...searchResults.partialMatches,
+      ...searchResults.fallbackMatches,
+    ];
+
+    const uniqueResults = merged.filter(
+      (niche, index, self) => index === self.findIndex((item) => item.id === niche.id)
+    );
+
+    return uniqueResults;
+  }, [searchResults]);
+
   const results = useMemo(() => {
-    return niches
+    return baseResults
       .filter((n) => {
-        if (q && !(`${n.name} ${n.category} ${n.why}`.toLowerCase().includes(q))) return false;
         if (filters.style !== "any" && n.style !== filters.style && n.style !== "both") return false;
         if (filters.format !== "any" && n.format !== filters.format && n.format !== "both") return false;
         if (filters.beginnerFriendly && !n.beginnerFriendly) return false;
@@ -28,7 +46,14 @@ const Results = () => {
         return true;
       })
       .sort((a, b) => b.opportunity - a.opportunity);
-  }, [q, filters, niches]);
+  }, [baseResults, filters]);
+
+  const exactIds = new Set(searchResults.exactMatches.map((n) => n.id));
+  const partialIds = new Set(searchResults.partialMatches.map((n) => n.id));
+
+  const exactResults = results.filter((n) => exactIds.has(n.id));
+  const relatedResults = results.filter((n) => partialIds.has(n.id));
+  const fallbackResults = results.filter((n) => !exactIds.has(n.id) && !partialIds.has(n.id));
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -43,12 +68,24 @@ const Results = () => {
             <ArrowLeft className="h-4 w-4" />
             Back to home
           </Link>
+
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            {q ? <>Niches matching "<span className="bg-gradient-primary bg-clip-text text-transparent">{q}</span>"</> : "Trending niches for you"}
+            {q ? (
+              <>
+                Niches matching{" "}
+                <span className="bg-gradient-primary bg-clip-text text-transparent">"{q}"</span>
+              </>
+            ) : (
+              "Trending niches for you"
+            )}
           </h1>
+
           <p className="mt-2 text-muted-foreground">
-            Sorted by opportunity score. Refine the filters to match your style.
+            {q
+              ? "Showing exact matches, related niches, and smart fallback recommendations."
+              : "Sorted by opportunity score. Refine the filters to match your style."}
           </p>
+
           <div className="mt-6">
             <SearchBar size="md" />
           </div>
@@ -62,10 +99,12 @@ const Results = () => {
               "Loading niches..."
             ) : (
               <>
-                <span className="font-semibold text-foreground">{results.length}</span> niche{results.length !== 1 && "s"} found
+                <span className="font-semibold text-foreground">{results.length}</span> niche
+                {results.length !== 1 && "s"} found
               </>
             )}
           </p>
+
           <button
             onClick={() => setShowFilters((s) => !s)}
             className="lg:hidden inline-flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium hover:border-primary/40 transition-smooth"
@@ -92,15 +131,12 @@ const Results = () => {
             <p className="font-display text-lg font-bold">Couldn't load niches</p>
             <p className="mt-2 text-sm text-muted-foreground">{error}</p>
           </div>
-        ) : niches.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center">
-            <p className="font-display text-lg font-bold">No niches found</p>
-            <p className="mt-2 text-sm text-muted-foreground">Add rows to your "niches" table to see them here.</p>
-          </div>
         ) : results.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center">
             <p className="font-display text-lg font-bold">No niches match your filters</p>
-            <p className="mt-2 text-sm text-muted-foreground">Try loosening a filter or searching a different topic.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Try loosening a filter or searching a different topic.
+            </p>
             <button
               onClick={() => setFilters(defaultFilters)}
               className="mt-5 inline-flex items-center rounded-xl bg-foreground text-background px-4 py-2 text-sm font-semibold hover:opacity-90 transition-smooth"
@@ -109,10 +145,39 @@ const Results = () => {
             </button>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {results.map((n) => (
-              <NicheCard key={n.id} niche={n} />
-            ))}
+          <div className="space-y-10">
+            {exactResults.length > 0 && (
+              <div>
+                <h2 className="font-display text-2xl font-bold mb-4">Best Matches</h2>
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                  {exactResults.map((n) => (
+                    <NicheCard key={n.id} niche={n} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {relatedResults.length > 0 && (
+              <div>
+                <h2 className="font-display text-2xl font-bold mb-4">Related Niches</h2>
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                  {relatedResults.map((n) => (
+                    <NicheCard key={n.id} niche={n} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {fallbackResults.length > 0 && (
+              <div>
+                <h2 className="font-display text-2xl font-bold mb-4">You May Also Explore</h2>
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                  {fallbackResults.map((n) => (
+                    <NicheCard key={n.id} niche={n} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </section>
