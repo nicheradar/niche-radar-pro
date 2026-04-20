@@ -8,9 +8,16 @@ export const SearchBar = ({ size = "lg" }: { size?: "lg" | "md" }) => {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    navigate(`/results?${params.toString()}`);
+
+    const cleanQuery = q.trim();
+
+    // ❗ prevent empty search
+    if (!cleanQuery) {
+      navigate("/results"); // show fallback/trending
+      return;
+    }
+
+    navigate(`/results?q=${encodeURIComponent(cleanQuery)}`);
   };
 
   const big = size === "lg";
@@ -18,20 +25,26 @@ export const SearchBar = ({ size = "lg" }: { size?: "lg" | "md" }) => {
   return (
     <form
       onSubmit={submit}
-      className={`group relative w-full max-w-2xl mx-auto ${
-        big ? "" : ""
-      }`}
+      className="group relative w-full max-w-2xl mx-auto"
     >
       <div className="relative flex items-center rounded-2xl border border-border bg-card shadow-card transition-smooth group-focus-within:shadow-elegant group-focus-within:border-primary/40">
-        <Search className={`${big ? "ml-5 h-5 w-5" : "ml-4 h-4 w-4"} text-muted-foreground shrink-0`} />
+        
+        <Search
+          className={`${
+            big ? "ml-5 h-5 w-5" : "ml-4 h-4 w-4"
+          } text-muted-foreground shrink-0`}
+        />
+
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Try: faceless tech, history facts, finance shorts…"
+          placeholder="Try: AI tools, cats, finance, horror, motivation…"
+          autoFocus
           className={`flex-1 bg-transparent outline-none px-3 ${
             big ? "py-5 text-base" : "py-3 text-sm"
           } placeholder:text-muted-foreground`}
         />
+
         <button
           type="submit"
           className={`m-1.5 inline-flex items-center gap-2 rounded-xl bg-gradient-primary text-primary-foreground font-semibold shadow-glow hover:opacity-95 transition-smooth ${
