@@ -4,7 +4,7 @@ export async function generateAINiches(query: string) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+        Authorization: `Bearer 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`,
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
