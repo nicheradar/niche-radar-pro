@@ -38,7 +38,7 @@ const viralityToScore = (value: string) => {
 const detectAudience = (query: string) => {
   const q = query.toLowerCase();
 
-  if (q.includes("crypto") || q.includes("finance") || q.includes("money")) {
+  if (q.includes("crypto") || q.includes("finance") || q.includes("money") || q.includes("invest")) {
     return "young adults and beginners interested in wealth";
   }
 
@@ -450,93 +450,932 @@ const getCategoryBenchmarks = (category: string) => {
       return { competitionHigh: 55, competitionMedium: 63, monetization: 76, ease: 70, repeatability: 80 };
     case "Travel":
       return { competitionHigh: 50, competitionMedium: 59, monetization: 70, ease: 75, repeatability: 81 };
+    case "Sports":
+      return { competitionHigh: 56, competitionMedium: 64, monetization: 67, ease: 74, repeatability: 85 };
     default:
       return { competitionHigh: 50, competitionMedium: 58, monetization: 68, ease: 80, repeatability: 84 };
   }
 };
 
 const buildVideoIdeas = (query: string, nicheName: string, category: string) => {
-  switch (category) {
-    case "Pets":
+  const name = nicheName.toLowerCase();
+
+  if (category === "Finance") {
+    if (name.includes("explained")) {
       return [
-        `Funniest ${query} moments that got millions of views`,
-        `5 things people never knew about ${query}`,
-        `The most emotional ${query} story you’ll hear today`,
-        `How creators make viral ${query} Shorts`,
-        `Best ${query} content angles for new channels`,
+        `${query} explained in 30 seconds`,
+        `The simplest way to understand ${query}`,
+        `What beginners get wrong about ${query}`,
+        `${query} basics nobody explains properly`,
+        `Start learning ${query} with this simple angle`,
       ];
-    case "Finance":
+    }
+
+    if (name.includes("news") || name.includes("prediction")) {
       return [
-        `${nicheName} explained in 30 seconds`,
+        `Latest ${query} update creators should cover`,
+        `What just happened in ${query}`,
+        `Biggest ${query} trend this week`,
+        `Why people are watching ${query} news again`,
+        `How to turn ${query} updates into Shorts`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
         `3 ${query} mistakes beginners make`,
-        `Why ${query} content gets high CPM`,
-        `Best ${query} Shorts angles for fast growth`,
-        `What makes ${query} videos go viral`,
+        `Why most people lose early in ${query}`,
+        `Avoid these ${query} beginner traps`,
+        `The worst way to start with ${query}`,
+        `Mistakes that ruin ${query} progress fast`,
       ];
-    case "Tech":
+    }
+
+    if (name.includes("traditional investing") || name.includes("vs")) {
       return [
-        `Top ${query} tools beginners should try`,
-        `How ${query} saves creators hours every week`,
-        `Best ${query} content ideas for Shorts`,
-        `${query} mistakes slowing people down`,
-        `Why ${query} is exploding right now`,
+        `${query} vs stocks in 30 seconds`,
+        `Which is better: ${query} or traditional investing?`,
+        `Why people compare ${query} with stocks`,
+        `${query} vs real-world investing explained simply`,
+        `Best comparison angle for ${query} content`,
       ];
-    case "Religion":
+    }
+
+    if (name.includes("passive income")) {
       return [
-        `Powerful ${query} reminder for daily life`,
-        `Lessons from ${query} everyone should know`,
-        `Common misunderstandings about ${query}`,
-        `Beautiful short content ideas around ${query}`,
-        `How to make meaningful ${query} reminder videos`,
+        `Can ${query} really create passive income?`,
+        `Best ${query} passive income angle for Shorts`,
+        `How creators make ${query} content feel profitable`,
+        `Passive income myths in ${query}`,
+        `What beginners expect from ${query} income`,
       ];
-    default:
-      return [
-        `${nicheName} explained in 30 seconds`,
-        `Top 5 ${nicheName} content ideas`,
-        `Why ${nicheName} can grow fast on YouTube Shorts`,
-        `${nicheName} angles no one is using properly`,
-        `How to start ${nicheName} content as a beginner`,
-      ];
+    }
   }
+
+  if (category === "Pets") {
+    if (name.includes("funny")) {
+      return [
+        `Funniest ${query} moments caught on camera`,
+        `Why funny ${query} Shorts keep getting rewatched`,
+        `Best editing style for viral ${query} clips`,
+        `How to make hilarious ${query} compilations`,
+        `This type of ${query} humor always works`,
+      ];
+    }
+
+    if (name.includes("facts")) {
+      return [
+        `5 facts about ${query} most people never knew`,
+        `Strange ${query} behaviors explained simply`,
+        `The most surprising truth about ${query}`,
+        `Why ${query} do this weird thing`,
+        `Hidden facts that make ${query} content addictive`,
+      ];
+    }
+
+    if (name.includes("emotional") || name.includes("rescue")) {
+      return [
+        `The most emotional ${query} rescue story`,
+        `Why rescue ${query} videos hit so hard`,
+        `Before and after ${query} transformation story`,
+        `How emotional ${query} clips go viral`,
+        `Best storytelling angles for ${query} content`,
+      ];
+    }
+
+    if (name.includes("care") || name.includes("training")) {
+      return [
+        `Best beginner tips for ${query} owners`,
+        `How to train ${query} faster and easier`,
+        `Common ${query} care mistakes`,
+        `Things every new ${query} owner should know`,
+        `Easy ${query} training ideas for Shorts`,
+      ];
+    }
+
+    if (name.includes("vs")) {
+      return [
+        `${query} vs other pets: what people prefer`,
+        `Why ${query} beat other pets in views`,
+        `Best pet comparison angles using ${query}`,
+        `${query} vs dogs/cats explained simply`,
+        `Pet debate content ideas around ${query}`,
+      ];
+    }
+  }
+
+  if (category === "Tech") {
+    if (name.includes("tools")) {
+      return [
+        `Top ${query} tools creators should try`,
+        `Best ${query} tools for saving time`,
+        `3 underrated ${query} tools`,
+        `Which ${query} tool is actually worth it?`,
+        `Fastest-growing ${query} tool content ideas`,
+      ];
+    }
+
+    if (name.includes("side hustle")) {
+      return [
+        `How ${query} can become a side hustle`,
+        `Best ${query} side hustle angles for Shorts`,
+        `Can beginners make money with ${query}?`,
+        `What makes ${query} side hustle content clickable`,
+        `Easy money-focused ${query} content ideas`,
+      ];
+    }
+
+    if (name.includes("tutorial")) {
+      return [
+        `${query} tutorial in 30 seconds`,
+        `Beginner guide to ${query}`,
+        `How to start using ${query} today`,
+        `${query} basics no one explains clearly`,
+        `Simple ${query} workflow for beginners`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `Common mistakes people make with ${query}`,
+        `Why beginners fail with ${query}`,
+        `Avoid these ${query} workflow mistakes`,
+        `The wrong way to use ${query}`,
+        `Fix these ${query} errors fast`,
+      ];
+    }
+
+    if (name.includes("old methods") || name.includes("vs")) {
+      return [
+        `${query} vs old way of doing things`,
+        `Why ${query} is replacing old methods`,
+        `Old workflow vs ${query} workflow`,
+        `Which is better: ${query} or manual work?`,
+        `Comparison content ideas around ${query}`,
+      ];
+    }
+  }
+
+  if (category === "Fitness") {
+    if (name.includes("beginners")) {
+      return [
+        `${query} beginner routine in 30 seconds`,
+        `How to start ${query} without confusion`,
+        `Best beginner angle for ${query} Shorts`,
+        `What every ${query} beginner should know`,
+        `Simple ${query} start plan for new viewers`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `The biggest ${query} mistakes slowing progress`,
+        `Why most people fail at ${query} early`,
+        `Avoid these ${query} beginner errors`,
+        `Small ${query} mistakes with big consequences`,
+        `Fix these ${query} problems fast`,
+      ];
+    }
+
+    if (name.includes("transformations")) {
+      return [
+        `Best ${query} transformation story angles`,
+        `Why transformation content in ${query} works`,
+        `Before and after ${query} Shorts idea`,
+        `How to make ${query} progress content addictive`,
+        `The most inspiring ${query} turnaround format`,
+      ];
+    }
+
+    if (name.includes("home")) {
+      return [
+        `Easy ${query} routine to do at home`,
+        `Home-friendly ${query} content people love`,
+        `No-equipment ${query} idea for beginners`,
+        `How to make home ${query} Shorts go viral`,
+        `Best at-home ${query} format for faceless channels`,
+      ];
+    }
+
+    if (name.includes("myths")) {
+      return [
+        `${query} myths most people still believe`,
+        `Truth vs myth in ${query}`,
+        `Fake advice in ${query} explained`,
+        `What’s actually true about ${query}`,
+        `Myth-busting ${query} content ideas`,
+      ];
+    }
+  }
+
+  if (category === "Education") {
+    if (name.includes("sound fake")) {
+      return [
+        `${query} facts that sound completely fake`,
+        `5 unbelievable ${query} facts`,
+        `This ${query} fact feels made up`,
+        `Strange truths about ${query}`,
+        `Why viewers love shocking ${query} facts`,
+      ];
+    }
+
+    if (name.includes("30 seconds")) {
+      return [
+        `${query} explained in 30 seconds`,
+        `The fastest way to understand ${query}`,
+        `${query} summary for beginners`,
+        `Simple ${query} breakdown for Shorts`,
+        `Quick ${query} lesson idea`,
+      ];
+    }
+
+    if (name.includes("hidden stories")) {
+      return [
+        `The hidden story behind ${query}`,
+        `What nobody tells you about ${query}`,
+        `Forgotten parts of ${query}`,
+        `The untold side of ${query}`,
+        `Story-based ${query} content ideas`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `The biggest mistakes in ${query}`,
+        `How one mistake changed ${query}`,
+        `Worst decisions in ${query}`,
+        `Failure stories from ${query}`,
+        `Mistake-based ${query} Shorts ideas`,
+      ];
+    }
+
+    if (name.includes("then vs now")) {
+      return [
+        `${query} then vs now in 30 seconds`,
+        `How ${query} changed over time`,
+        `Old vs modern ${query}`,
+        `What ${query} looked like before`,
+        `Comparison-based ${query} storytelling ideas`,
+      ];
+    }
+  }
+
+  if (category === "Entertainment") {
+    if (name.includes("true scary stories")) {
+      return [
+        `A true ${query} story that gets darker fast`,
+        `Scary ${query} story with a twist ending`,
+        `Best storytelling format for ${query} Shorts`,
+        `Why true ${query} stories keep people watching`,
+        `Short suspense idea around ${query}`,
+      ];
+    }
+
+    if (name.includes("caught on camera")) {
+      return [
+        `${query} moments caught on camera`,
+        `The creepiest ${query} footage online`,
+        `Proof-style ${query} content that hooks fast`,
+        `Why camera evidence ${query} clips go viral`,
+        `Best visual format for ${query} Shorts`,
+      ];
+    }
+
+    if (name.includes("myths") || name.includes("legends")) {
+      return [
+        `The scariest myth about ${query}`,
+        `Legends around ${query} people still believe`,
+        `Myth-based ${query} storytelling ideas`,
+        `Famous ${query} legends explained`,
+        `This ${query} myth sounds too real`,
+      ];
+    }
+
+    if (name.includes("unexplained")) {
+      return [
+        `Unexplained ${query} facts that feel impossible`,
+        `Nobody can explain these ${query} moments`,
+        `Why ${query} mysteries hook viewers hard`,
+        `The strangest ${query} cases ever`,
+        `Mystery-style ${query} content angles`,
+      ];
+    }
+
+    if (name.includes("top 5")) {
+      return [
+        `Top 5 scariest ${query} moments`,
+        `Ranking the creepiest ${query} clips`,
+        `Best list-style ${query} content idea`,
+        `Why top 5 ${query} Shorts work well`,
+        `Most viral countdown format for ${query}`,
+      ];
+    }
+  }
+
+  if (category === "Religion") {
+    if (name.includes("daily reminders")) {
+      return [
+        `A short ${query} reminder for today`,
+        `Powerful daily reminder around ${query}`,
+        `Short faith-based ${query} content idea`,
+        `Meaningful ${query} reminder for busy people`,
+        `Why daily ${query} reminder Shorts work`,
+      ];
+    }
+
+    if (name.includes("daily life")) {
+      return [
+        `Lessons from ${query} for everyday life`,
+        `How ${query} applies to real situations`,
+        `Daily life advice inspired by ${query}`,
+        `Practical reflection content around ${query}`,
+        `Useful ${query} lessons for modern life`,
+      ];
+    }
+
+    if (name.includes("recitations") || name.includes("meanings")) {
+      return [
+        `Beautiful ${query} recitation with meaning`,
+        `Short reflective content around ${query}`,
+        `Why meaning-based ${query} videos connect deeply`,
+        `Best peaceful format for ${query} Shorts`,
+        `Emotional recitation-style ${query} idea`,
+      ];
+    }
+
+    if (name.includes("misunderstandings")) {
+      return [
+        `Common misunderstandings about ${query}`,
+        `What people often get wrong about ${query}`,
+        `Clarifying ${query} in a simple way`,
+        `Short educational content around ${query}`,
+        `Best misconception-based ${query} format`,
+      ];
+    }
+
+    if (name.includes("stories")) {
+      return [
+        `A short story with a lesson from ${query}`,
+        `Story-based ${query} content that stays memorable`,
+        `Powerful lesson from a ${query} story`,
+        `Why stories around ${query} work so well`,
+        `Simple storytelling format for ${query}`,
+      ];
+    }
+  }
+
+  if (category === "Automotive") {
+    if (name.includes("facts") || name.includes("specs")) {
+      return [
+        `${query} facts most people never knew`,
+        `Fastest specs breakdown for ${query}`,
+        `Surprising truth about ${query}`,
+        `Why ${query} specs content gets views`,
+        `Best fact-based ${query} Shorts angle`,
+      ];
+    }
+
+    if (name.includes("luxury comparisons")) {
+      return [
+        `${query} luxury comparison in 30 seconds`,
+        `Which ${query} is actually better?`,
+        `Why viewers love comparing ${query}`,
+        `The best vs battle using ${query}`,
+        `High-retention comparison format for ${query}`,
+      ];
+    }
+
+    if (name.includes("hidden features")) {
+      return [
+        `Hidden ${query} features people miss`,
+        `The coolest secret in ${query}`,
+        `Feature-reveal ${query} content idea`,
+        `Why hidden-feature ${query} clips work`,
+        `Short showcase format around ${query}`,
+      ];
+    }
+
+    if (name.includes("cheapest") || name.includes("expensive")) {
+      return [
+        `Cheapest vs most expensive ${query}`,
+        `Price-based comparison around ${query}`,
+        `How far apart ${query} prices really go`,
+        `Best rich-vs-budget ${query} angle`,
+        `This ${query} price gap is crazy`,
+      ];
+    }
+
+    if (name.includes("dream garage")) {
+      return [
+        `Build a dream garage using ${query}`,
+        `Most aspirational ${query} garage ideas`,
+        `Why dream garage ${query} content performs`,
+        `Best fantasy-style ${query} Shorts format`,
+        `Garage ranking content around ${query}`,
+      ];
+    }
+  }
+
+  if (category === "Travel") {
+    if (name.includes("must see")) {
+      return [
+        `${query} places you must see once`,
+        `Why this ${query} destination deserves more attention`,
+        `Best visual ${query} travel format for Shorts`,
+        `Top must-see spots in ${query}`,
+        `Aspirational ${query} content that performs well`,
+      ];
+    }
+
+    if (name.includes("hidden gems")) {
+      return [
+        `Hidden gems in ${query} most tourists miss`,
+        `The underrated side of ${query}`,
+        `Secret places around ${query}`,
+        `Why hidden-gem ${query} content works`,
+        `Discovery-style ${query} Shorts ideas`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `Tourist mistakes people make in ${query}`,
+        `Avoid these ${query} travel errors`,
+        `What not to do in ${query}`,
+        `Travel mistake content idea around ${query}`,
+        `Best warning-style ${query} Shorts format`,
+      ];
+    }
+
+    if (name.includes("budget") || name.includes("luxury")) {
+      return [
+        `${query} budget vs luxury in 30 seconds`,
+        `Cheap vs expensive travel around ${query}`,
+        `What ${query} looks like on different budgets`,
+        `Comparison content idea for ${query} travel`,
+        `Travel contrast videos around ${query}`,
+      ];
+    }
+
+    if (name.includes("before you go")) {
+      return [
+        `What to know before visiting ${query}`,
+        `Important facts before going to ${query}`,
+        `Beginner travel advice around ${query}`,
+        `Planning-based ${query} Shorts idea`,
+        `Useful travel prep content for ${query}`,
+      ];
+    }
+  }
+
+  return [
+    `${nicheName} explained in 30 seconds`,
+    `Top 5 ${nicheName} content ideas`,
+    `Why ${nicheName} can grow fast on YouTube Shorts`,
+    `${nicheName} angles no one is using properly`,
+    `How to start ${nicheName} content as a beginner`,
+  ];
 };
 
-const buildHooks = (query: string, category: string) => {
-  switch (category) {
-    case "Pets":
+const buildHooks = (query: string, nicheName: string, category: string) => {
+  const name = nicheName.toLowerCase();
+
+  if (category === "Finance") {
+    if (name.includes("explained")) {
       return [
-        `This ${query} video idea is almost impossible to ignore`,
-        `Pet content like this gets shared crazy fast`,
-        `Most creators are missing this emotional ${query} angle`,
-        `This is one of the easiest pet niches to grow right now`,
+        `Most people still don’t understand ${query} this simply`,
+        `This is the easiest ${query} explanation you’ll hear today`,
+        `If ${query} feels confusing, start here`,
+        `Beginners keep overcomplicating ${query}`,
       ];
-    case "Finance":
+    }
+
+    if (name.includes("news") || name.includes("prediction")) {
       return [
-        `This ${query} angle gets attention fast`,
-        `Most people still don’t understand this part of ${query}`,
-        `This finance niche can hook viewers in seconds`,
-        `If I started a ${query} channel today, I’d use this`,
+        `Something big just happened in ${query}`,
+        `This ${query} update is getting attention fast`,
+        `Most people will hear about this ${query} trend too late`,
+        `This week could change the way people view ${query}`,
       ];
-    case "Tech":
+    }
+
+    if (name.includes("mistakes")) {
       return [
-        `This ${query} content angle feels unfairly good`,
-        `Nobody is using this ${query} format properly`,
-        `This is one of the smartest tech niches right now`,
-        `This ${query} idea can grow even without a big audience`,
+        `Beginners keep making this ${query} mistake`,
+        `This small ${query} mistake can cost a lot`,
+        `Most people start ${query} the wrong way`,
+        `Avoid this if you’re new to ${query}`,
       ];
-    default:
+    }
+
+    if (name.includes("traditional investing") || name.includes("vs")) {
       return [
-        `This ${query} angle is way more powerful than people think`,
-        `Nobody is using this ${query} content idea properly`,
-        `This is one of the easiest ${query} formats to grow`,
-        `If I started a ${query} channel today, I’d use this angle`,
+        `People keep comparing ${query} to traditional investing for a reason`,
+        `This ${query} comparison gets attention every time`,
+        `Which side wins: ${query} or traditional investing?`,
+        `Most viewers already have an opinion on this ${query} debate`,
       ];
+    }
+
+    if (name.includes("passive income")) {
+      return [
+        `Everyone wants passive income from ${query}, but almost nobody says this`,
+        `This ${query} angle feels more profitable than people think`,
+        `The idea of passive income in ${query} hooks instantly`,
+        `Most people click on ${query} income content for one reason`,
+      ];
+    }
   }
+
+  if (category === "Pets") {
+    if (name.includes("funny")) {
+      return [
+        `This ${query} clip format is almost impossible not to watch`,
+        `Funny ${query} content gets rewatched for a reason`,
+        `This is one of the easiest viral angles for ${query}`,
+        `Most pet creators ignore how powerful this ${query} format is`,
+      ];
+    }
+
+    if (name.includes("facts")) {
+      return [
+        `Most people never knew this about ${query}`,
+        `This weird ${query} fact makes people stop scrolling`,
+        `Nobody talks enough about this side of ${query}`,
+        `This ${query} truth sounds fake but it isn’t`,
+      ];
+    }
+
+    if (name.includes("emotional") || name.includes("rescue")) {
+      return [
+        `This type of ${query} story hits emotionally every time`,
+        `People don’t just watch ${query} rescue content — they feel it`,
+        `This emotional ${query} angle gets strong engagement`,
+        `It’s hard to ignore a story like this about ${query}`,
+      ];
+    }
+
+    if (name.includes("care") || name.includes("training")) {
+      return [
+        `Most ${query} owners learn this too late`,
+        `This ${query} tip saves beginners a lot of trouble`,
+        `If you own ${query}, this matters more than you think`,
+        `Simple ${query} advice like this performs really well`,
+      ];
+    }
+
+    if (name.includes("vs")) {
+      return [
+        `This ${query} comparison instantly starts debate`,
+        `People love arguing about ${query} vs other pets`,
+        `This type of pet comparison content pulls comments fast`,
+        `One side always wins in this ${query} debate`,
+      ];
+    }
+  }
+
+  if (category === "Tech") {
+    if (name.includes("tools")) {
+      return [
+        `This ${query} tool angle feels unfairly good`,
+        `Most creators still haven’t tried this side of ${query}`,
+        `This ${query} tool content can hook viewers in seconds`,
+        `People love discovering shortcuts like this in ${query}`,
+      ];
+    }
+
+    if (name.includes("side hustle")) {
+      return [
+        `This ${query} side hustle angle gets attention fast`,
+        `Most people click because they want this from ${query}`,
+        `This is one of the strongest money angles inside ${query}`,
+        `Beginners love ${query} when it sounds like this`,
+      ];
+    }
+
+    if (name.includes("tutorial")) {
+      return [
+        `This ${query} tutorial format keeps things simple`,
+        `Most people want ${query} explained this way`,
+        `If ${query} feels hard, this is the easiest entry point`,
+        `Beginner-friendly ${query} content performs for a reason`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `Most people use ${query} the wrong way at first`,
+        `This ${query} mistake kills progress fast`,
+        `Avoiding this one ${query} error changes everything`,
+        `People keep repeating this bad habit in ${query}`,
+      ];
+    }
+
+    if (name.includes("old methods") || name.includes("vs")) {
+      return [
+        `This ${query} comparison makes the value obvious`,
+        `Once viewers see ${query} vs the old way, they get it`,
+        `This is why ${query} feels so much faster`,
+        `The before-vs-after angle in ${query} works every time`,
+      ];
+    }
+  }
+
+  if (category === "Fitness") {
+    if (name.includes("beginners")) {
+      return [
+        `Most people start ${query} in the hardest way possible`,
+        `This beginner ${query} angle removes the confusion`,
+        `If ${query} feels overwhelming, start here`,
+        `This simple ${query} format is perfect for new viewers`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `This ${query} mistake slows down progress more than people think`,
+        `Most beginners ruin ${query} results with this habit`,
+        `This is why many people quit ${query} too early`,
+        `Avoid this if you want faster ${query} progress`,
+      ];
+    }
+
+    if (name.includes("transformations")) {
+      return [
+        `Transformation content in ${query} hooks people instantly`,
+        `People love seeing this side of ${query}`,
+        `This ${query} progress format is hard to ignore`,
+        `Few things stop the scroll like a ${query} transformation`,
+      ];
+    }
+
+    if (name.includes("home")) {
+      return [
+        `This home ${query} angle works because it feels easy to start`,
+        `People click when ${query} looks this accessible`,
+        `This is one of the easiest entry points into ${query}`,
+        `Home-friendly ${query} content has broad appeal`,
+      ];
+    }
+
+    if (name.includes("myths")) {
+      return [
+        `Most people still believe this myth about ${query}`,
+        `This common ${query} advice is more wrong than people think`,
+        `Myth-busting ${query} content gets attention fast`,
+        `People love finding out they were wrong about ${query}`,
+      ];
+    }
+  }
+
+  if (category === "Education") {
+    if (name.includes("sound fake")) {
+      return [
+        `This ${query} fact sounds fake, but it’s real`,
+        `People stop scrolling for facts like this about ${query}`,
+        `This is the kind of ${query} fact that gets rewatched`,
+        `Most viewers won’t believe this about ${query} at first`,
+      ];
+    }
+
+    if (name.includes("30 seconds")) {
+      return [
+        `This is the fastest way to understand ${query}`,
+        `Most people want ${query} explained this quickly`,
+        `Quick explanation content like this works well for ${query}`,
+        `This ${query} breakdown makes a hard topic feel simple`,
+      ];
+    }
+
+    if (name.includes("hidden stories")) {
+      return [
+        `Nobody talks enough about this hidden side of ${query}`,
+        `This forgotten story from ${query} deserves more attention`,
+        `People love discovering the unknown part of ${query}`,
+        `This untold ${query} angle feels fresh instantly`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `One mistake changed everything in ${query}`,
+        `This failure story from ${query} is hard to ignore`,
+        `People click fast on mistakes inside ${query}`,
+        `The biggest wrong turn in ${query} makes a great hook`,
+      ];
+    }
+
+    if (name.includes("then vs now")) {
+      return [
+        `This then-vs-now ${query} angle makes the difference obvious`,
+        `People love seeing how much ${query} changed`,
+        `This comparison makes ${query} instantly more interesting`,
+        `Old vs modern ${query} is a strong scroll-stopper`,
+      ];
+    }
+  }
+
+  if (category === "Entertainment") {
+    if (name.includes("true scary stories")) {
+      return [
+        `This ${query} story gets darker the longer it goes`,
+        `People keep watching because they want the ending`,
+        `This true ${query} format is built for retention`,
+        `It’s hard to scroll away from suspense like this`,
+      ];
+    }
+
+    if (name.includes("caught on camera")) {
+      return [
+        `This ${query} footage makes people look twice`,
+        `Proof-style ${query} clips hook instantly`,
+        `People stop scrolling when ${query} looks this real`,
+        `This visual ${query} angle is made for Shorts`,
+      ];
+    }
+
+    if (name.includes("myths") || name.includes("legends")) {
+      return [
+        `This ${query} legend still creeps people out`,
+        `Myths like this keep viewers watching till the end`,
+        `People love stories that blur the line in ${query}`,
+        `This scary ${query} myth feels more real than it should`,
+      ];
+    }
+
+    if (name.includes("unexplained")) {
+      return [
+        `Nobody can explain this ${query} case properly`,
+        `This unexplained ${query} moment pulls people in fast`,
+        `Mystery is what makes ${query} content so addictive`,
+        `The less clear it is, the stronger this ${query} hook becomes`,
+      ];
+    }
+
+    if (name.includes("top 5")) {
+      return [
+        `Ranked ${query} content keeps people waiting for number one`,
+        `This top-5 ${query} structure works for a reason`,
+        `Viewers love countdown-style ${query} videos`,
+        `This ranking format makes ${query} more bingeable`,
+      ];
+    }
+  }
+
+  if (category === "Religion") {
+    if (name.includes("daily reminders")) {
+      return [
+        `A reminder like this around ${query} can stop the scroll gently`,
+        `Short ${query} reminders connect because they feel personal`,
+        `This daily ${query} angle is simple but powerful`,
+        `People often need exactly this kind of ${query} reminder`,
+      ];
+    }
+
+    if (name.includes("daily life")) {
+      return [
+        `This is how ${query} connects to real life`,
+        `People respond well when ${query} feels practical`,
+        `This daily-life angle makes ${query} easier to reflect on`,
+        `Short practical lessons around ${query} can work beautifully`,
+      ];
+    }
+
+    if (name.includes("recitations") || name.includes("meanings")) {
+      return [
+        `This ${query} recitation format feels deeply calming`,
+        `Meaning-based ${query} content connects more than people expect`,
+        `There’s something powerful about short ${query} reflection videos`,
+        `This style of ${query} content feels both peaceful and memorable`,
+      ];
+    }
+
+    if (name.includes("misunderstandings")) {
+      return [
+        `Many people misunderstand this about ${query}`,
+        `This simple clarification around ${query} matters`,
+        `Educational ${query} content like this builds trust fast`,
+        `People appreciate when ${query} is explained clearly`,
+      ];
+    }
+
+    if (name.includes("stories")) {
+      return [
+        `Stories with lessons from ${query} stay with people longer`,
+        `This storytelling angle makes ${query} more memorable`,
+        `People connect deeply with lesson-based ${query} stories`,
+        `A short story around ${query} can carry a strong message`,
+      ];
+    }
+  }
+
+  if (category === "Automotive") {
+    if (name.includes("facts") || name.includes("specs")) {
+      return [
+        `This ${query} fact makes viewers stop fast`,
+        `Specs like this make ${query} content instantly clickable`,
+        `People love learning surprising details about ${query}`,
+        `This is the kind of ${query} fact that gets replayed`,
+      ];
+    }
+
+    if (name.includes("luxury comparisons")) {
+      return [
+        `Luxury comparisons around ${query} create debate instantly`,
+        `People love choosing sides in ${query} matchups`,
+        `This comparison format makes ${query} more addictive`,
+        `One of these ${query} options always wins the comments`,
+      ];
+    }
+
+    if (name.includes("hidden features")) {
+      return [
+        `This hidden ${query} feature is more impressive than people expect`,
+        `Feature-reveal ${query} content hooks instantly`,
+        `People love discovering secret details in ${query}`,
+        `This kind of ${query} reveal keeps viewers watching`,
+      ];
+    }
+
+    if (name.includes("cheapest") || name.includes("expensive")) {
+      return [
+        `The gap between cheap and expensive ${query} is wild`,
+        `People can’t resist a price contrast like this in ${query}`,
+        `Budget vs luxury makes ${query} content very clickable`,
+        `This ${query} comparison feels extreme in the best way`,
+      ];
+    }
+
+    if (name.includes("dream garage")) {
+      return [
+        `Dream garage ${query} content triggers pure aspiration`,
+        `People love imagining their perfect ${query} lineup`,
+        `This fantasy-style ${query} format feels instantly engaging`,
+        `Aspirational ${query} content like this gets attention fast`,
+      ];
+    }
+  }
+
+  if (category === "Travel") {
+    if (name.includes("must see")) {
+      return [
+        `This side of ${query} makes people want to travel instantly`,
+        `Must-see ${query} content works because it sells a feeling`,
+        `People save videos like this about ${query}`,
+        `This travel angle makes ${query} look unforgettable`,
+      ];
+    }
+
+    if (name.includes("hidden gems")) {
+      return [
+        `People love hidden-gem content around ${query}`,
+        `This lesser-known side of ${query} feels more exciting`,
+        `Discovery-style ${query} videos get attention for a reason`,
+        `It feels special when ${query} looks unknown like this`,
+      ];
+    }
+
+    if (name.includes("mistakes")) {
+      return [
+        `Most tourists make this mistake in ${query}`,
+        `Warning-style content like this performs well for ${query}`,
+        `People click fast when they want to avoid travel mistakes`,
+        `This small ${query} mistake can ruin the experience`,
+      ];
+    }
+
+    if (name.includes("budget") || name.includes("luxury")) {
+      return [
+        `Budget vs luxury makes ${query} instantly more watchable`,
+        `People love seeing both sides of ${query}`,
+        `This contrast-based ${query} angle creates curiosity fast`,
+        `Travel comparison content like this works really well`,
+      ];
+    }
+
+    if (name.includes("before you go")) {
+      return [
+        `People love useful advice before going to ${query}`,
+        `This prep-style ${query} content feels practical and clickable`,
+        `Travel tips around ${query} work because they reduce uncertainty`,
+        `This is the kind of ${query} advice viewers actually save`,
+      ];
+    }
+  }
+
+  return [
+    `This ${query} angle is way more powerful than people think`,
+    `Nobody is using this ${query} content idea properly`,
+    `This is one of the easiest ${query} formats to grow`,
+    `If I started a ${query} channel today, I’d use this angle`,
+  ];
 };
 
 export async function generateAINiches(query: string) {
   try {
-    const ideas: AINicheRaw[] = buildIdeas(query);
-    const category = detectCategory(query);
+    const cleanQuery = query.trim();
+    const ideas: AINicheRaw[] = buildIdeas(cleanQuery);
+    const category = detectCategory(cleanQuery);
     const benchmarks = getCategoryBenchmarks(category);
 
     return ideas.map((idea, index) => {
@@ -544,16 +1383,12 @@ export async function generateAINiches(query: string) {
       const competition =
         idea.virality === "High" ? benchmarks.competitionHigh : benchmarks.competitionMedium;
 
-      const monetization =
-        category === "Finance" || category === "Tech"
-          ? benchmarks.monetization
-          : benchmarks.monetization;
-
+      const monetization = benchmarks.monetization;
       const ease = benchmarks.ease;
       const repeatability = benchmarks.repeatability;
 
       return {
-        id: `ai-${slugify(query)}-${index + 1}`,
+        id: `ai-${slugify(cleanQuery)}-${index + 1}`,
         name: idea.name,
         emoji: "✨",
         category,
@@ -569,10 +1404,19 @@ export async function generateAINiches(query: string) {
           repeatability,
         },
         why: idea.description,
-        videoIdeas: buildVideoIdeas(query, idea.name, category),
-        hooks: buildHooks(query, category),
-        keywords: [query, idea.name.toLowerCase(), `${query} niche`, `${query} shorts`],
-        related: [idea.audience.toLowerCase(), `${query} content`, `${query} ideas`],
+        videoIdeas: buildVideoIdeas(cleanQuery, idea.name, category),
+        hooks: buildHooks(cleanQuery, idea.name, category),
+        keywords: [
+          cleanQuery,
+          idea.name.toLowerCase(),
+          `${cleanQuery} niche`,
+          `${cleanQuery} shorts`,
+        ],
+        related: [
+          idea.audience.toLowerCase(),
+          `${cleanQuery} content`,
+          `${cleanQuery} ideas`,
+        ],
         opportunity: Math.round(
           (100 - competition) * 0.25 +
             viralityScore * 0.25 +
