@@ -52,6 +52,8 @@ const mapRow = (r: NicheRow): NicheWithOpportunity => {
     why: r.why_it_works ?? "",
     videoIdeas: Array.isArray(r.example_video_ideas) ? r.example_video_ideas : [],
     hooks: Array.isArray(r.hook_ideas) ? r.hook_ideas : [],
+    keywords: [],
+    related: [],
     opportunity: calcOpportunity(scores),
   };
 };

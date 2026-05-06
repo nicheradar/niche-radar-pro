@@ -28,6 +28,7 @@ export const Header = () => {
           <a href="/#features" className="hover:text-foreground transition-smooth">Features</a>
           <a href="/#how" className="hover:text-foreground transition-smooth">How it works</a>
           <a href="/#pricing" className="hover:text-foreground transition-smooth">Pricing</a>
+          <Link to="/blog" className="hover:text-foreground transition-smooth">Blog</Link>
         </nav>
         <div className="flex items-center gap-2">
           {loading ? (
